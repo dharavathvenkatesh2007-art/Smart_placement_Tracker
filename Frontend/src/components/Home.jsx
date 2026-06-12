@@ -58,15 +58,15 @@ const Home = () => {
               {/* Stats Grid */}
               <div className="grid grid-cols-3 gap-6 pt-8">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <p className="text-4xl font-bold text-white">15K+</p>
+                  <p className="text-4xl font-bold text-white">1.5K+</p>
                   <p className="text-cyan-100 text-sm font-medium mt-2">Students Placed</p>
                 </div>
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <p className="text-4xl font-bold text-white">750+</p>
+                  <p className="text-4xl font-bold text-white">1500+</p>
                   <p className="text-cyan-100 text-sm font-medium mt-2">Recruiters</p>
                 </div>
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 text-center">
-                  <p className="text-4xl font-bold text-white">1.2K+</p>
+                  <p className="text-4xl font-bold text-white">500+</p>
                   <p className="text-cyan-100 text-sm font-medium mt-2">Drives Live</p>
                 </div>
               </div>

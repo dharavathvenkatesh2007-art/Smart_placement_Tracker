@@ -131,7 +131,7 @@ const Applications = () => {
                   <tr className="bg-slate-50 text-left text-xs font-bold uppercase tracking-[0.16em] text-slate-500">
                     <th className="p-4">Candidate</th>
                     <th className="p-4">Drive</th>
-                    <th className="p-4">College</th>
+                    
                     <th className="p-4">Resume</th>
                     <th className="p-4">Applied</th>
                     <th className="p-4">Status</th>
@@ -149,7 +149,6 @@ const Applications = () => {
                         <p className="font-semibold">{app.position}</p>
                         <p className="text-xs text-slate-500">{app.companyName}</p>
                       </td>
-                      <td className="p-4">{app.studentCollege || 'N/A'}</td>
                       <td className="p-4">
                         {app.resumeURL ? (
                           <a
