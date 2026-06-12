@@ -1,0 +1,23 @@
+##company registration
+POST http://localhost:2306/auth/register
+Content-Type: application/json
+
+{
+  "companyName": "company1",
+  "email": "company1@mail.com",
+  "password": "company1234",
+  "role": "COMPANY",
+  "profileImageUrl":""
+}
+
+###company login
+POST http://localhost:2306/auth/login
+Content-Type: application/json
+
+{
+  "email": "company1@mail.com",
+    "password": "company1234"
+}
+
+###company logout
+POST http://localhost:2306/auth/logout

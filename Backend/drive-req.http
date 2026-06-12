@@ -1,0 +1,15 @@
+###create drive
+POST http://localhost:2306/drive/create
+Content-Type: application/json
+
+{
+  "userId":"6a29092134d76e452fc643c9",
+  "driveDate":"2026-06-15",
+  "minCGPA":7.5,
+  "requiredSkills":["JavaScript","Node.js"],
+  "jobDescription":"We are looking for talented software engineers to join our team.",
+  "driveStatus":"UPCOMING"
+}
+###get all drives
+GET http://localhost:2306/drive/get
+

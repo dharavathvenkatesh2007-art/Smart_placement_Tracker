@@ -1,0 +1,47 @@
+###student profile update
+POST http://localhost:2306/student/profile
+Content-Type: application/json  
+
+{
+  "userId":"6a28fa46a4fceaea750452fe",
+  "education":[
+    {
+      "degree": "B.Tech",
+      "institution": "ABC University",
+      "yearOfPassing": 2028,
+      "cgpa": 8.5
+    }
+  ],
+  "skills": ["JavaScript", "Node.js", "React"],
+  "experience": "",
+  "projects":"",
+  "resumeUrl":"http"
+
+}
+####Login User
+POST http://localhost:2306/auth/login
+Content-Type: application/json
+
+{
+  "email": "user1@mail.com",
+  "password": "user1234"
+} 
+###Logout User
+POST http://localhost:2306/auth/logout
+###get student profile
+GET http://localhost:2306/student/profile
+
+###get all drives
+GET http://localhost:2306/drive/get
+
+###Apply Drive
+POST http://localhost:2306/apply/6a2958524941e8bf7424173d
+Content-Type:application/json
+
+{
+  "studentId":"",
+  "driveId":""
+  
+
+}
+
