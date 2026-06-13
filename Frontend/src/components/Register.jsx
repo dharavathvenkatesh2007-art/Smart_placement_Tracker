@@ -119,6 +119,21 @@ const Register = () => {
               />
             </div>
 
+            {formData.role === 'student' && (
+              <div className={commonStyles.formGroup}>
+                <label className={commonStyles.label}>College Name</label>
+                <input
+                  type="text"
+                  name="college"
+                  value={formData.college}
+                  onChange={handleChange}
+                  className={commonStyles.input}
+                  placeholder="Enter your college/university name"
+                  required
+                />
+              </div>
+            )}
+
             <div className={commonStyles.formGroup}>
               <label className={commonStyles.label}>Email Address</label>
               <input

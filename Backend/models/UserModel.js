@@ -57,6 +57,9 @@ const userSchema=new  Schema({
     hrLinkedInLink:{
         type:String
     },
+    college:{
+        type:String
+    },
     isUserActive:{
         type:Boolean,
         default:true

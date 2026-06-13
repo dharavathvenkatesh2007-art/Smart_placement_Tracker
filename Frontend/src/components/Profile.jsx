@@ -35,6 +35,16 @@ const Profile = () => {
     rollNumber: ''
   });
 
+  // Change password form state
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+  const [passwordError, setPasswordError] = useState(null);
+  const [passwordSuccess, setPasswordSuccess] = useState(null);
+
   const calculateCompletion = () => {
     const basicFields = [
       formData.name,
@@ -245,6 +255,56 @@ const Profile = () => {
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPasswordData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handlePasswordSubmit = async (e) => {
+    e.preventDefault();
+    setPasswordError(null);
+    setPasswordSuccess(null);
+
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+
+    if (passwordData.newPassword.length < 6) {
+      setPasswordError('New password must be at least 6 characters long');
+      return;
+    }
+
+    setIsChangingPassword(true);
+    try {
+      const token = localStorage.getItem('token');
+      const headers = { Authorization: `Bearer ${token}` };
+      await axios.put(
+        `${import.meta.env.VITE_API_URL}/user/change-password`,
+        {
+          currentPassword: passwordData.currentPassword,
+          newPassword: passwordData.newPassword
+        },
+        { headers }
+      );
+
+      setPasswordSuccess('Password updated successfully');
+      setPasswordData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+      });
+    } catch (error) {
+      console.error('Error changing password:', error);
+      setPasswordError(error.response?.data?.message || 'Failed to change password');
+    } finally {
+      setIsChangingPassword(false);
+    }
+  };
+
   if (isLoading) return <div className="text-center py-20 font-medium text-lg">Loading Profile Data...</div>;
 
   const isStudent = user?.role === 'STUDENT' || userRole === 'student';
@@ -281,6 +341,9 @@ const Profile = () => {
               <p><strong>Email:</strong> {formData.email}</p>
               <p><strong>Phone:</strong> {formData.phone || 'Not provided'}</p>
               <p><strong>Location:</strong> {formData.location || 'Not provided'}</p>
+              {isStudent && (
+                <p><strong>College:</strong> {formData.college || 'Not provided'}</p>
+              )}
               {!isStudent && !isAdmin && (
                 <>
                   <p><strong>Website:</strong> {formData.website ? <a href={formData.website} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">{formData.website}</a> : 'Not provided'}</p>
@@ -324,6 +387,68 @@ const Profile = () => {
                 Edit Profile
               </button>
             )}
+          </div>
+
+          <div className={commonStyles.card + ' mt-6 text-left'}>
+            <h3 className={commonStyles.heading.h3 + ' mb-4 text-blue-600'}>Change Password</h3>
+            
+            {passwordError && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+                {passwordError}
+              </div>
+            )}
+            
+            {passwordSuccess && (
+              <div className="mb-4 rounded-xl border border-green-200 bg-green-50 p-3 text-sm font-semibold text-green-700">
+                {passwordSuccess}
+              </div>
+            )}
+
+            <form onSubmit={handlePasswordSubmit} className="space-y-4">
+              <div className={commonStyles.formGroup}>
+                <label className={commonStyles.label}>Current Password</label>
+                <input
+                  type="password"
+                  name="currentPassword"
+                  value={passwordData.currentPassword}
+                  onChange={handlePasswordChange}
+                  className={commonStyles.input}
+                  required
+                />
+              </div>
+              
+              <div className={commonStyles.formGroup}>
+                <label className={commonStyles.label}>New Password</label>
+                <input
+                  type="password"
+                  name="newPassword"
+                  value={passwordData.newPassword}
+                  onChange={handlePasswordChange}
+                  className={commonStyles.input}
+                  required
+                />
+              </div>
+              
+              <div className={commonStyles.formGroup}>
+                <label className={commonStyles.label}>Confirm New Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  value={passwordData.confirmPassword}
+                  onChange={handlePasswordChange}
+                  className={commonStyles.input}
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isChangingPassword}
+                className={commonStyles.button.primary + ' w-full mt-2'}
+              >
+                {isChangingPassword ? 'Changing Password...' : 'Update Password'}
+              </button>
+            </form>
           </div>
         </div>
 
@@ -379,6 +504,20 @@ const Profile = () => {
                     />
                   </div>
                   
+                  {isStudent && (
+                    <div className={commonStyles.formGroup}>
+                      <label className={commonStyles.label}>College / Institution *</label>
+                      <input
+                        type="text"
+                        name="college"
+                        value={formData.college || ''}
+                        onChange={handleChange}
+                        className={commonStyles.input}
+                        required
+                      />
+                    </div>
+                  )}
+
                   {!isStudent && !isAdmin && (
                     <>
                       <div className={commonStyles.formGroup}>

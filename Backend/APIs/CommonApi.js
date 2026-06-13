@@ -86,6 +86,9 @@ commonApp.post("/register", (req, res, next) => {
                 company: user.companyName,
                 college: user.college,
                 role: user.role,
+                profileImageURL: user.profileImageURL,
+                location: user.location,
+                bio: user.bio,
                 website: user.website,
                 companyType: user.companyType,
                 hrLinkedInLink: user.hrLinkedInLink
@@ -138,6 +141,9 @@ commonApp.post("/login", async(req,res)=>{
                 company: user.companyName,
                 college: user.college,
                 role: user.role,
+                profileImageURL: user.profileImageURL,
+                location: user.location,
+                bio: user.bio,
                 website: user.website,
                 companyType: user.companyType,
                 hrLinkedInLink: user.hrLinkedInLink
@@ -171,6 +177,8 @@ commonApp.get("/me", verifyToken(), async(req,res,next)=>{
                 college: user.college,
                 role: user.role,
                 profileImageURL: user.profileImageURL,
+                location: user.location,
+                bio: user.bio,
                 website: user.website,
                 companyType: user.companyType,
                 hrLinkedInLink: user.hrLinkedInLink
@@ -231,12 +239,49 @@ commonApp.put("/profile", verifyToken(), (req, res, next) => {
                 college: user.college,
                 role: user.role,
                 profileImageURL: user.profileImageURL,
+                location: user.location,
+                bio: user.bio,
                 website: user.website,
                 companyType: user.companyType,
                 hrLinkedInLink: user.hrLinkedInLink
             }
         });
     }catch(err){
+        next(err);
+    }
+});
+
+// Change password
+commonApp.put("/change-password", verifyToken(), async (req, res, next) => {
+    try {
+        const userId = req.user.id;
+        const { currentPassword, newPassword } = req.body;
+
+        if (!currentPassword || !newPassword) {
+            return res.status(400).json({ message: "Current password and new password are required" });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: "New password must be at least 6 characters long" });
+        }
+
+        const user = await UserModel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Compare current password
+        const isMatch = await compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Incorrect current password" });
+        }
+
+        // Hash and update new password
+        user.password = await hash(newPassword, 10);
+        await user.save();
+
+        res.status(200).json({ message: "Password changed successfully" });
+    } catch (err) {
         next(err);
     }
 });
