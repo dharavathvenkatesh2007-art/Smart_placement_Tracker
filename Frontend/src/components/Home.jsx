@@ -56,7 +56,7 @@ const Home = () => {
               </div>
 
               {/* Stats Grid */}
-              <div className="grid grid-cols-3 gap-6 pt-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 text-center">
                   <p className="text-4xl font-bold text-white">1.5K+</p>
                   <p className="text-cyan-100 text-sm font-medium mt-2">Students Placed</p>
