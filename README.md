@@ -1,4 +1,4 @@
-Smart Placement Tracker
+ Smart Placement Tracker
 
 A full-stack MERN application designed to streamline college placement activities by helping Training & Placement Offices (TPOs) manage recruitment drives, track student progress, and automate communication throughout the hiring process.
 
