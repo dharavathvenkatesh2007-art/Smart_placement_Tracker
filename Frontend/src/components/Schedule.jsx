@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import axios from 'axios';
 import commonStyles from '../style/common';
 import useAuthStore from '../store/authStore';
+import ResumeLink from './ResumeLink';
 
 const Schedule = () => {
   const [schedules, setSchedules] = useState([]);
@@ -245,18 +246,7 @@ const Schedule = () => {
                     {isResume ? (
                       <div>
                         <p className="text-slate-500 font-medium text-xs uppercase">Resume</p>
-                        {sch.resumeURL ? (
-                          <a
-                            href={sch.resumeURL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="inline-flex items-center gap-1.5 mt-1.5 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition border border-blue-200"
-                          >
-                            📄 View Resume PDF
-                          </a>
-                        ) : (
-                          <p className="text-slate-400 mt-1 text-xs italic">No resume uploaded</p>
-                        )}
+                        <ResumeLink resumeURL={sch.resumeURL} className="inline-flex items-center gap-1.5 mt-1.5 px-4 py-2 bg-blue-50 text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition border border-blue-200">View Resume PDF</ResumeLink>
                       </div>
                     ) : (
                       <>
@@ -482,14 +472,7 @@ const Schedule = () => {
               {editForm.roundType === 'Resume Shortlist' && selectedSchedule?.resumeURL && (
                 <div className="bg-blue-50 p-4 rounded-2xl border border-blue-200">
                   <p className="text-xs text-slate-500 uppercase font-bold mb-2">Candidate's Resume</p>
-                  <a
-                    href={selectedSchedule.resumeURL}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition border border-blue-200"
-                  >
-                    📄 View Resume PDF
-                  </a>
+                  <ResumeLink resumeURL={selectedSchedule.resumeURL} className="inline-flex items-center gap-1.5 px-4 py-2 bg-white text-blue-700 rounded-xl text-sm font-bold hover:bg-blue-100 transition border border-blue-200">View Resume PDF</ResumeLink>
                 </div>
               )}
 
@@ -587,3 +570,4 @@ const Schedule = () => {
 };
 
 export default Schedule;
+

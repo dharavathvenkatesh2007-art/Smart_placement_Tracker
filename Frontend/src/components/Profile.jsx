@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import commonStyles from '../style/common';
 import useAuthStore from '../store/authStore';
+import ResumeLink from './ResumeLink';
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -793,7 +794,7 @@ const Profile = () => {
                     />
                     {studentProfile.resumeURL && (
                       <p className="text-xs text-blue-600 mt-2">
-                        Current Resume: <a href={studentProfile.resumeURL} target="_blank" rel="noreferrer" className="underline font-semibold">View uploaded resume</a>
+                        Current Resume: <ResumeLink resumeURL={studentProfile.resumeURL} className="underline font-semibold">View uploaded resume</ResumeLink>
                       </p>
                     )}
                   </div>
@@ -920,14 +921,9 @@ const Profile = () => {
                   <div>
                     <h4 className="text-xs uppercase tracking-wider text-slate-400 font-bold mb-2">Resume Attachment</h4>
                     {studentProfile.resumeURL ? (
-                      <a
-                        href={studentProfile.resumeURL}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 transition rounded-xl text-sm font-semibold border border-blue-200"
-                      >
-                        📄 Download / View Resume PDF
-                      </a>
+                      <ResumeLink resumeURL={studentProfile.resumeURL} className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 transition rounded-xl text-sm font-semibold border border-blue-200">
+                        Download / View Resume PDF
+                      </ResumeLink>
                     ) : (
                       <p className="text-red-500 text-sm italic">No resume uploaded. Click Edit Profile to upload one.</p>
                     )}
@@ -943,3 +939,4 @@ const Profile = () => {
 };
 
 export default Profile;
+

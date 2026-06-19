@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import commonStyles from '../style/common';
 import useAuthStore from '../store/authStore';
+import ResumeLink from './ResumeLink';
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('analytics');
@@ -447,13 +448,7 @@ const AdminDashboard = () => {
                               <p className="text-xs text-slate-500">{student.phone}</p>
                             </td>
                             <td className="p-5">
-                              {student.resumeURL ? (
-                                <a href={student.resumeURL} target="_blank" rel="noreferrer" className="text-teal-400 hover:underline font-semibold flex items-center gap-1">
-                                  PDF Resume 📄
-                                </a>
-                              ) : (
-                                <span className="text-xs text-slate-500 italic">Not uploaded</span>
-                              )}
+                              <ResumeLink resumeURL={student.resumeURL} className="text-teal-400 hover:underline font-semibold flex items-center gap-1">PDF Resume</ResumeLink>
                             </td>
                             <td className="p-5">
                               <div className="flex gap-2">
@@ -908,13 +903,7 @@ const AdminDashboard = () => {
                 <p><strong>Institution:</strong> {selectedStudent.college}</p>
                 <p className="mt-1">
                   <strong>Resume file:</strong>{' '}
-                  {selectedStudent.resumeURL ? (
-                    <a href={selectedStudent.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-teal-400 hover:underline">
-                      Download CV PDF 📄
-                    </a>
-                  ) : (
-                    <span className="text-slate-500 italic">Not uploaded</span>
-                  )}
+                  <ResumeLink resumeURL={selectedStudent.resumeURL} className="font-semibold text-teal-400 hover:underline">Download CV PDF</ResumeLink>
                 </p>
                 {(selectedStudent.linkedInLink || selectedStudent.gitHubLink) && (
                   <div className="flex gap-4 mt-3 pt-3 border-t border-slate-850">
@@ -1004,3 +993,4 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
+

@@ -4,13 +4,28 @@ import {config} from 'dotenv';
 import {verifyToken} from '../middlewares/VerifyToken.js';
 import {upload} from '../config/multer.js';
 import { DriveModel } from '../models/DriveModel.js';
-import { mkdir, writeFile } from 'fs/promises';
-import path from 'path';
+import { ApplicationModel } from '../models/ApplicationModel.js';
+import { connection } from 'mongoose';
+import { GridFSBucket, ObjectId } from 'mongodb';
 
 config();
 export const studentApp=exp.Router();
 
+const getResumeBucket = () => new GridFSBucket(connection.db, { bucketName: "resumes" });
 
+const uploadResumeToGridFS = (file, userId) => {
+    return new Promise((resolve, reject) => {
+        const fileName = `resume_${userId}_${Date.now()}.pdf`;
+        const uploadStream = getResumeBucket().openUploadStream(fileName, {
+            contentType: file.mimetype,
+            metadata: { userId }
+        });
+
+        uploadStream.on("error", reject);
+        uploadStream.on("finish", () => resolve(uploadStream.id));
+        uploadStream.end(file.buffer);
+    });
+};
 
 // create or update student profile
 studentApp.post("/profile",verifyToken("STUDENT"),upload.single("resume"),async(req,res,next)=>{
@@ -20,14 +35,9 @@ studentApp.post("/profile",verifyToken("STUDENT"),upload.single("resume"),async(
         
         // Handle resume file upload
         if(req.file){
-           const uploadDir = path.resolve("uploads", "resumes");
-            await mkdir(uploadDir, { recursive: true });
-
-            const fileName = `resume_${userId}_${Date.now()}.pdf`;
-            const filePath = path.join(uploadDir, fileName);
-            await writeFile(filePath, req.file.buffer);
-
-            studentData.resumeURL = `${req.protocol}://${req.get("host")}/uploads/resumes/${fileName}`;
+            const resumeFileId = await uploadResumeToGridFS(req.file, userId);
+            studentData.resumeFileId = resumeFileId;
+            studentData.resumeURL = `${req.protocol}://${req.get("host")}/api/student/resume/${resumeFileId}`;
         }
         
         // Parse skills from string / JSON if necessary
@@ -70,6 +80,59 @@ studentApp.post("/profile",verifyToken("STUDENT"),upload.single("resume"),async(
             message:"Student profile created successfully",
             payload:student
         });
+    }
+    catch(err){
+        next(err);
+    }
+});
+
+// stream resume PDF from MongoDB GridFS
+studentApp.get("/resume/:fileId", verifyToken(), async(req,res,next)=>{
+    try{
+        const { fileId } = req.params;
+
+        if (!ObjectId.isValid(fileId)) {
+            return res.status(400).json({ message: "Invalid resume file id" });
+        }
+
+        const resumeFileId = new ObjectId(fileId);
+        const student = await StudentModel.findOne({ resumeFileId });
+
+        if(!student){
+            return res.status(404).json({ message: "Resume not found. Please upload the resume again." });
+        }
+
+        const isOwner = student.userId.toString() === req.user.id;
+        let isAuthorizedCompany = false;
+
+        if(req.user.role === "COMPANY"){
+            const companyDrives = await DriveModel.find({ userId: req.user.id }).select("_id");
+            const companyDriveIds = companyDrives.map((drive) => drive._id);
+            const companyApplication = await ApplicationModel.findOne({
+                userId: student.userId,
+                driveId: { $in: companyDriveIds }
+            });
+            isAuthorizedCompany = !!companyApplication;
+        }
+
+        if(!isOwner && !isAuthorizedCompany){
+            return res.status(403).json({ message: "You are not authorized to view this resume" });
+        }
+
+        res.set({
+            "Content-Type": "application/pdf",
+            "Content-Disposition": "inline; filename=resume.pdf"
+        });
+
+        const downloadStream = getResumeBucket().openDownloadStream(resumeFileId);
+        downloadStream.on("error", () => {
+            if(!res.headersSent){
+                res.status(404).json({ message: "Resume file not found. Please upload it again." });
+            } else {
+                res.end();
+            }
+        });
+        downloadStream.pipe(res);
     }
     catch(err){
         next(err);

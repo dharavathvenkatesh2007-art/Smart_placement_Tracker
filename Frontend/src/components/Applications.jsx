@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import commonStyles from '../style/common';
 import useAuthStore from '../store/authStore';
+import ResumeLink from './ResumeLink';
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
@@ -150,18 +151,7 @@ const Applications = () => {
                         <p className="text-xs text-slate-500">{app.companyName}</p>
                       </td>
                       <td className="p-4">
-                        {app.resumeURL ? (
-                          <a
-                            href={app.resumeURL}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="font-semibold text-blue-600 hover:text-blue-700"
-                          >
-                            View PDF
-                          </a>
-                        ) : (
-                          <span className="text-xs text-slate-400">Not uploaded</span>
-                        )}
+                        <ResumeLink resumeURL={app.resumeURL} className="font-semibold text-blue-600 hover:text-blue-700">View PDF</ResumeLink>
                       </td>
                       <td className="p-4">{new Date(app.appliedOn).toLocaleDateString()}</td>
                       <td className="p-4">
@@ -319,13 +309,7 @@ const Applications = () => {
                   <p><strong>College:</strong> {activeApplication.studentCollege || 'N/A'}</p>
                   <p className="mt-1">
                     <strong>Resume Link:</strong>{' '}
-                    {activeApplication.resumeURL ? (
-                      <a href={activeApplication.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-blue-600 hover:underline">
-                        View Resume PDF 📄
-                      </a>
-                    ) : (
-                      <span className="text-slate-400">Not uploaded</span>
-                    )}
+                    <ResumeLink resumeURL={activeApplication.resumeURL} className="font-semibold text-blue-600 hover:underline">View Resume PDF</ResumeLink>
                   </p>
                   {(activeApplication.studentDetails?.linkedInLink || activeApplication.studentDetails?.gitHubLink) && (
                     <div className="flex gap-4 mt-3 pt-3 border-t border-slate-200">
@@ -585,13 +569,7 @@ const StudentProfileModal = ({ student, onClose }) => {
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
             <p>
               <strong>Resume Link:</strong>{' '}
-              {student.resumeURL ? (
-                <a href={student.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-blue-600 hover:underline">
-                  View Resume PDF 📄
-                </a>
-              ) : (
-                <span className="text-slate-400">Not uploaded</span>
-              )}
+              <ResumeLink resumeURL={student.resumeURL} className="font-semibold text-blue-600 hover:underline">View Resume PDF</ResumeLink>
             </p>
             {(student.studentDetails?.linkedInLink || student.studentDetails?.gitHubLink) && (
               <div className="flex gap-4 pt-2 border-t border-slate-200">
@@ -670,3 +648,4 @@ const StudentProfileModal = ({ student, onClose }) => {
 };
 
 export default Applications;
+

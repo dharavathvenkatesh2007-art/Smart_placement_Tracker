@@ -35,6 +35,9 @@ const studentSchema=new  Schema({
     resumeURL:{
         type:String,
     },
+    resumeFileId:{
+        type:Types.ObjectId,
+    },
     linkedInLink:{
         type:String
     },

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import commonStyles from '../style/common';
 import useAuthStore from '../store/authStore';
+import ResumeLink from './ResumeLink';
 
 const CompanyDashboard = () => {
   const [drives, setDrives] = useState([]);
@@ -317,13 +318,7 @@ const CompanyDashboard = () => {
                       <td className="p-4">{app.position}</td>
                       <td className="p-4 text-sm">{app.studentCollege || 'N/A'}</td>
                       <td className="p-4 text-sm">
-                        {app.resumeURL ? (
-                          <a href={app.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-blue-600 hover:text-blue-700">
-                            View PDF
-                          </a>
-                        ) : (
-                          <span className="text-slate-400">Not uploaded</span>
-                        )}
+                        <ResumeLink resumeURL={app.resumeURL} className="font-semibold text-blue-600 hover:text-blue-700">View PDF</ResumeLink>
                       </td>
                       <td className="p-4 text-sm">{new Date(app.appliedOn).toLocaleDateString()}</td>
                       <td className="p-4">
@@ -565,13 +560,7 @@ const CompanyDashboard = () => {
                   <p><strong>College:</strong> {selectedApp.studentCollege || 'N/A'}</p>
                   <p className="mt-1">
                     <strong>Resume Link:</strong>{' '}
-                    {selectedApp.resumeURL ? (
-                      <a href={selectedApp.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-blue-600 hover:underline">
-                        View Resume PDF 📄
-                      </a>
-                    ) : (
-                      <span className="text-slate-400">Not uploaded</span>
-                    )}
+                    <ResumeLink resumeURL={selectedApp.resumeURL} className="font-semibold text-blue-600 hover:underline">View Resume PDF</ResumeLink>
                   </p>
                   {(selectedApp.studentDetails?.linkedInLink || selectedApp.studentDetails?.gitHubLink) && (
                     <div className="flex gap-4 mt-3 pt-3 border-t border-slate-200">
@@ -739,13 +728,7 @@ const StudentProfileModal = ({ student, onClose }) => {
           <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
             <p>
               <strong>Resume Link:</strong>{' '}
-              {student.resumeURL ? (
-                <a href={student.resumeURL} target="_blank" rel="noreferrer" className="font-semibold text-blue-600 hover:underline">
-                  View Resume PDF 📄
-                </a>
-              ) : (
-                <span className="text-slate-400">Not uploaded</span>
-              )}
+              <ResumeLink resumeURL={student.resumeURL} className="font-semibold text-blue-600 hover:underline">View Resume PDF</ResumeLink>
             </p>
             {(student.studentDetails?.linkedInLink || student.studentDetails?.gitHubLink) && (
               <div className="flex gap-4 pt-2 border-t border-slate-200">
@@ -824,3 +807,4 @@ const StudentProfileModal = ({ student, onClose }) => {
 };
 
 export default CompanyDashboard;
+
