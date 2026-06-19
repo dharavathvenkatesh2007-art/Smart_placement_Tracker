@@ -82,8 +82,8 @@ const AiChatbot = () => {
         >
           <span className="text-3xl animate-pulse">💬</span>
           <span className="absolute -top-1 -right-1 flex h-4 w-4">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-4 w-4 bg-cyan-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-4 w-4 "></span>
           </span>
           <span className="absolute right-20 bg-slate-900 text-white text-xs py-1.5 px-3 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 font-semibold whitespace-nowrap shadow-lg">
             Placement AI Assistant
@@ -98,7 +98,7 @@ const AiChatbot = () => {
           <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-5 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
-                <span className="text-xl">🤖</span>
+                <span className="text-xl"></span>
               </div>
               <div>
                 <h3 className="font-bold text-sm leading-none">Smart Assistant</h3>
