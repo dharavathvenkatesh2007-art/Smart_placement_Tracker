@@ -10,7 +10,7 @@ const ResumeLink = ({ resumeURL, children = 'View PDF', className = '' }) => {
       await openResume(resumeURL);
     } catch (error) {
       console.error('Error opening resume:', error);
-      alert('Unable to open resume. Please ask the student to upload the resume again.');
+      alert(error.message || 'Unable to open resume. Please ask the student to upload the resume again.');
     }
   };
 

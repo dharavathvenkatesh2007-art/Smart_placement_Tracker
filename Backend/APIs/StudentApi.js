@@ -37,7 +37,7 @@ studentApp.post("/profile",verifyToken("STUDENT"),upload.single("resume"),async(
         if(req.file){
             const resumeFileId = await uploadResumeToGridFS(req.file, userId);
             studentData.resumeFileId = resumeFileId;
-            studentData.resumeURL = `${req.protocol}://${req.get("host")}/api/student/resume/${resumeFileId}`;
+            studentData.resumeURL = `/api/student/resume/${resumeFileId}`;
         }
         
         // Parse skills from string / JSON if necessary
