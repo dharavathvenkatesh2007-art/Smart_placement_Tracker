@@ -67,7 +67,7 @@ const Navbar = () => {
                 <>
                   <Link
                     to={userRole === 'admin' ? '/admin-dashboard' : (userRole === 'student' ? '/student-dashboard' : '/company-dashboard')}
-                    className="font-medium hover:text-cyan-300 transition text-cyan-300"
+                    className="font-medium hover:text-cyan-300 transition "
                   >
                     Dashboard
                   </Link>
