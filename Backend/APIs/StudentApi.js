@@ -5,13 +5,13 @@ import {verifyToken} from '../middlewares/VerifyToken.js';
 import {upload} from '../config/multer.js';
 import { DriveModel } from '../models/DriveModel.js';
 import { ApplicationModel } from '../models/ApplicationModel.js';
-import { connection } from 'mongoose';
+import mongoose from 'mongoose';
 import { GridFSBucket, ObjectId } from 'mongodb';
 
 config();
 export const studentApp=exp.Router();
 
-const getResumeBucket = () => new GridFSBucket(connection.db, { bucketName: "resumes" });
+const getResumeBucket = () => new GridFSBucket(mongoose.connection.db, { bucketName: "resumes" });
 
 const uploadResumeToGridFS = (file, userId) => {
     return new Promise((resolve, reject) => {
